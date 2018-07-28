@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
+
 import classes from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../hoc/WithClass';
 
-class App extends Component {
-  constructor (props) {
-    super(props);
-    console.log('[App.js] Inside Constructor', props);
+class App extends PureComponent {
+  constructor( props ) {
+    super( props );
+    console.log( '[App.js] Inside Constructor', props );
     this.state = {
       persons: [
         { id: 'asfa1', name: 'Max', age: 28 },
@@ -15,28 +17,29 @@ class App extends Component {
       ],
       otherState: 'some other value',
       showPersons: false
-    }
+    };
   }
 
-  componentWillMount() {
-    console.log('[App.js] Inside componentWillMount()')
+  componentWillMount () {
+    console.log( '[App.js] Inside componentWillMount()' );
   }
 
-  componentDidMount() {
-    console.log('[App.js] Inside componentDidMount()')
+  componentDidMount () {
+    console.log( '[App.js] Inside componentDidMount()' );
   }
 
-  shouldComponentUpdate(nextProps, nextState, nextContext) {
-    console.log('[UPDATE App.js] inside shouldComponentUpdate', nextProps, nextState);
-    return true; 
+  // shouldComponentUpdate ( nextProps, nextState ) {
+  //   console.log( '[UPDATE App.js] Inside shouldComponentUpdate', nextProps, nextState );
+  //   return nextState.persons !== this.state.persons ||
+  //     nextState.showPersons !== this.state.showPersons;
+  // }
+
+  componentWillUpdate ( nextProps, nextState ) {
+    console.log( '[UPDATE App.js] Inside componentWillUpdate', nextProps, nextState );
   }
 
-  componentWillUpdate(nextProps, nextState) {
-      console.log('[UPDATE App.js] inside componentWillUpdate', nextProps, nextState);
-  }
-  
-  componentDidUpdate(prevProps, prevState) {
-    console.log('[UPDATE App.js] inside componentDidUpdate') 
+  componentDidUpdate () {
+    console.log( '[UPDATE App.js] Inside componentDidUpdate' );
   }
 
   // state = {
@@ -81,26 +84,26 @@ class App extends Component {
   }
 
   render () {
-    console.log('[App.js] Inside Render()');
+    console.log( '[App.js] Inside render()' );
     let persons = null;
 
     if ( this.state.showPersons ) {
-      persons = <Persons 
-          persons={this.state.persons}
-          clicked={this.deletePersonHandler}
-          changed={this.nameChangedHandler}/>;  
+      persons = <Persons
+        persons={this.state.persons}
+        clicked={this.deletePersonHandler}
+        changed={this.nameChangedHandler} />;
     }
 
     return (
-      <div className={classes.App}>
-        <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
+      <WithClass classes={classes.App}>
+        <button onClick={() => { this.setState( { showPersons: true } ) }}>Show Persons</button>
         <Cockpit
-        appTitle={this.props.title} 
-        showPersons={this.state.showPersons}
-        persons={this.state.persons}
-        clicked={this.togglePersonsHandler}/> 
+          appTitle={this.props.title}
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+          clicked={this.togglePersonsHandler} />
         {persons}
-      </div>
+      </WithClass>
     );
     // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Does this work now?'));
   }
